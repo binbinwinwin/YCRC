@@ -1,0 +1,269 @@
+/* 我的最愛頁樣式 */
+
+.favorites-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* 頁面標題列 */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .total-count {
+    font-size: 0.9rem;
+    color: #888;
+  }
+}
+
+/* 空狀態 */
+.empty-state {
+  text-align: center;
+  padding: 60px 16px;
+  color: #888;
+
+  p { margin-bottom: 16px; }
+}
+
+/* 按鈕共用（與景點頁一致） */
+.btn {
+  padding: 8px 18px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: #fff;
+  transition: background 0.2s, opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: #e05a2b;
+    color: #fff;
+    border-color: #e05a2b;
+    text-decoration: none;
+    display: inline-block;
+
+    &:hover:not(:disabled) { background: #c44d22; }
+  }
+
+  &--danger {
+    background: #d32f2f;
+    color: #fff;
+    border-color: #d32f2f;
+
+    &:hover:not(:disabled) { background: #b71c1c; }
+  }
+
+  &--edit {
+    flex-shrink: 0;
+    align-self: flex-start;
+    white-space: nowrap;
+  }
+}
+
+/* 列表標頭 */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 4px;
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+}
+
+/* 我的最愛列表 */
+.favorite-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 單筆卡片 */
+.favorite-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fff;
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+
+  .card-checkbox {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .card-image {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+      color: #aaa;
+      font-size: 0.8rem;
+    }
+  }
+
+  .card-body {
+    flex: 1;
+    min-width: 0;
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .card-address,
+    .card-tel,
+    .card-opentime {
+      font-size: 0.85rem;
+      color: #555;
+      margin: 2px 0;
+    }
+  }
+}
+
+/* 分頁 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+
+  .page-info {
+    font-size: 0.9rem;
+    color: #444;
+  }
+}
+
+/* ── 編輯 Modal ────────────────────────────────────────── */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  .modal-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 20px;
+  }
+}
+
+/* 表單 */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 500;
+
+      .required { color: #d32f2f; }
+    }
+
+    input,
+    textarea {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      width: 100%;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: #e05a2b;
+      }
+    }
+
+    textarea { resize: vertical; }
+
+    .error-msg {
+      font-size: 0.8rem;
+      color: #d32f2f;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+}
+
+/* RWD：手機版 */
+@media (max-width: 600px) {
+  .favorite-card {
+    flex-wrap: wrap;
+
+    .card-image {
+      width: 100%;
+      height: 180px;
+    }
+
+    .btn--edit {
+      align-self: auto;
+    }
+  }
+}

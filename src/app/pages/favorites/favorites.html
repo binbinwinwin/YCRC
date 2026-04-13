@@ -1,1 +1,132 @@
-<p>favorites works!</p>
+<!-- 我的最愛列表頁 -->
+<div class="favorites-page">
+
+  <div class="page-header">
+    <h1 class="page-title">我的最愛</h1>
+    <span class="total-count">共 {{ totalCount }} 筆</span>
+  </div>
+
+  <!-- 空狀態 -->
+  @if (totalCount === 0) {
+    <div class="empty-state">
+      <p>尚未加入任何景點</p>
+      <a routerLink="/attractions" class="btn btn--primary">去瀏覽景點</a>
+    </div>
+  }
+
+  @if (totalCount > 0) {
+    <!-- 工具列：全選 + 移除按鈕 -->
+    <div class="list-header">
+      <label class="checkbox-label">
+        <input type="checkbox" [checked]="allChecked()" (change)="toggleAll()" />
+        全選
+      </label>
+
+      @if (checkedIds().size > 0) {
+        <button class="btn btn--danger" (click)="removeChecked()">
+          移除（{{ checkedIds().size }}）
+        </button>
+      }
+    </div>
+
+    <!-- 我的最愛列表 -->
+    <ul class="favorite-list">
+      @for (item of pagedFavorites(); track item.id) {
+        <li class="favorite-card">
+
+          <input
+            type="checkbox"
+            class="card-checkbox"
+            [checked]="checkedIds().has(item.id)"
+            (change)="toggleCheck(item.id)"
+          />
+
+          <!-- 圖片 -->
+          @if (getImageSrc(item)) {
+            <img class="card-image" [src]="getImageSrc(item)" [alt]="item.name" loading="lazy" />
+          } @else {
+            <div class="card-image card-image--placeholder">無圖片</div>
+          }
+
+          <!-- 資訊 -->
+          <div class="card-body">
+            <h2 class="card-title">{{ item.name }}</h2>
+            <p class="card-address">{{ item.address }}</p>
+            @if (item.tel) {
+              <p class="card-tel">電話：{{ item.tel }}</p>
+            }
+            @if (item.open_time) {
+              <p class="card-opentime">開放時間：{{ item.open_time }}</p>
+            }
+          </div>
+
+          <!-- 編輯按鈕 -->
+          <button class="btn btn--edit" (click)="openEdit(item)">編輯</button>
+
+        </li>
+      }
+    </ul>
+
+    <!-- 分頁 -->
+    <div class="pagination">
+      <button class="btn" [disabled]="currentPage() <= 1" (click)="goToPrevPage()">上一頁</button>
+      <span class="page-info">第 {{ currentPage() }} / {{ totalPages() }} 頁</span>
+      <button class="btn" [disabled]="currentPage() >= totalPages()" (click)="goToNextPage()">下一頁</button>
+    </div>
+  }
+
+</div>
+
+<!-- 編輯 Modal -->
+@if (editingItem()) {
+  <div class="modal-backdrop" (click)="closeEdit()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title">編輯景點資料</h2>
+
+      <form [formGroup]="editForm" (ngSubmit)="submitEdit()" class="edit-form">
+
+        <!-- 景點名稱（必填） -->
+        <div class="form-group">
+          <label>景點名稱 <span class="required">*</span></label>
+          <input type="text" formControlName="name" placeholder="請輸入景點名稱" />
+          @if (editForm.get('name')?.invalid && editForm.get('name')?.touched) {
+            <span class="error-msg">景點名稱為必填</span>
+          }
+        </div>
+
+        <!-- 電話（不可輸入中文） -->
+        <div class="form-group">
+          <label>電話</label>
+          <input type="text" formControlName="tel" placeholder="例：02-12345678" />
+          @if (editForm.get('tel')?.invalid && editForm.get('tel')?.touched) {
+            <span class="error-msg">電話格式不正確（不可輸入中文）</span>
+          }
+        </div>
+
+        <!-- 地址 -->
+        <div class="form-group">
+          <label>地址</label>
+          <input type="text" formControlName="address" />
+        </div>
+
+        <!-- 開放時間 -->
+        <div class="form-group">
+          <label>開放時間</label>
+          <input type="text" formControlName="open_time" />
+        </div>
+
+        <!-- 介紹 -->
+        <div class="form-group">
+          <label>介紹</label>
+          <textarea formControlName="introduction" rows="3"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn" (click)="closeEdit()">取消</button>
+          <button type="submit" class="btn btn--primary">儲存</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
