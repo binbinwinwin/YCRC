@@ -4,7 +4,12 @@
   <nav class="navbar__nav">
     <!-- routerLinkActive 會在目前路由符合時加上 active class -->
     <a routerLink="/attractions" routerLinkActive="active">景點列表</a>
-    <a routerLink="/favorites" routerLinkActive="active">我的最愛</a>
+    <a routerLink="/favorites" routerLinkActive="active">
+      我的最愛
+      @if (favoritesService.count() > 0) {
+        <span class="badge">{{ favoritesService.count() }}</span>
+      }
+    </a>
   </nav>
 </header>
 

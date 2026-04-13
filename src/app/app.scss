@@ -35,6 +35,23 @@
         color: #fff;
       }
 
+      /* 我的最愛數量 badge */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 9px;
+        background: #fff;
+        color: #e05a2b;
+        font-size: 0.7rem;
+        font-weight: 700;
+        margin-left: 4px;
+        line-height: 1;
+      }
+
       /* routerLinkActive 加上的 class */
       &.active {
         background: rgba(255, 255, 255, 0.25);

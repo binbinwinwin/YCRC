@@ -12,8 +12,11 @@ import { Attraction, AttractionsResponse, Category } from '../models/attraction.
 export class AttractionService {
   private readonly http = inject(HttpClient);
 
-  /** API base URL */
-  private readonly baseUrl = 'https://www.travel.taipei/open-api';
+  /**
+   * API base URL
+   * 開發時走 proxy.conf.json（/open-api → https://www.travel.taipei/open-api）避免 CORS
+   */
+  private readonly baseUrl = '/open-api';
 
   /** 預設語系：正體中文 */
   private readonly lang = 'zh-tw';
