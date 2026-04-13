@@ -80,7 +80,7 @@
             @if (attraction.open_time) {
               <p class="card-opentime">開放時間：{{ attraction.open_time }}</p>
             }
-            <p class="card-intro">{{ attraction.introduction | slice:0:80 }}{{ (attraction.introduction?.length ?? 0) > 80 ? '...' : '' }}</p>
+            <p class="card-intro">{{ truncate(attraction.introduction) }}</p>
           </div>
 
         </li>

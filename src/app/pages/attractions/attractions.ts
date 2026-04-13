@@ -154,4 +154,10 @@ export class Attractions implements OnInit {
     const img = attraction.images?.[0];
     return img ? (img as any)['<Src>k__BackingField'] : '';
   }
+
+  /** 截斷文字，超過 max 字元加上省略號 */
+  truncate(text: string, max = 80): string {
+    if (!text) return '';
+    return text.length > max ? text.slice(0, max) + '...' : text;
+  }
 }
