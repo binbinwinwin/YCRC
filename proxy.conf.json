@@ -1,8 +1,13 @@
 {
   "/open-api": {
     "target": "https://www.travel.taipei",
-    "secure": true,
+    "secure": false,
     "changeOrigin": true,
-    "logLevel": "info"
+    "headers": {
+      "Accept": "application/json",
+      "Referer": "https://www.travel.taipei/",
+      "Origin": "https://www.travel.taipei",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    }
   }
 }
