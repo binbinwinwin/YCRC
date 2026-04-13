@@ -1,1 +1,98 @@
-<p>attractions works!</p>
+<!-- 景點列表頁 -->
+<div class="attractions-page">
+
+  <!-- 頁面標題 + 工具列 -->
+  <div class="page-header">
+    <h1 class="page-title">台北景點列表</h1>
+
+    <div class="toolbar">
+      <!-- 分類篩選下拉選單 -->
+      <select
+        class="category-select"
+        [ngModel]="selectedCategoryId()"
+        (ngModelChange)="onCategoryChange($event)"
+      >
+        <option value="">全部分類</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.name }}</option>
+        }
+      </select>
+
+      <!-- 加入我的最愛按鈕（有勾選才顯示） -->
+      @if (checkedIds().size > 0) {
+        <button class="btn btn--primary" (click)="addCheckedToFavorites()">
+          加入我的最愛（{{ checkedIds().size }}）
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- 載入中 -->
+  @if (loading()) {
+    <div class="loading">載入中...</div>
+  }
+
+  <!-- 錯誤訊息 -->
+  @if (errorMsg()) {
+    <div class="error-msg">{{ errorMsg() }}</div>
+  }
+
+  <!-- 景點列表 -->
+  @if (!loading() && !errorMsg()) {
+    <div class="list-header">
+      <!-- 全選 checkbox -->
+      <label class="checkbox-label">
+        <input type="checkbox" [checked]="allChecked()" (change)="toggleAll()" />
+        全選
+      </label>
+      <span class="total-count">共 {{ total() }} 筆</span>
+    </div>
+
+    <ul class="attraction-list">
+      @for (attraction of attractions(); track attraction.id) {
+        <li class="attraction-card" [class.is-favorite]="isFavorite(attraction.id)">
+
+          <!-- 勾選 checkbox -->
+          <input
+            type="checkbox"
+            class="card-checkbox"
+            [checked]="checkedIds().has(attraction.id)"
+            (change)="toggleCheck(attraction.id)"
+          />
+
+          <!-- 景點圖片 -->
+          @if (getImageSrc(attraction)) {
+            <img class="card-image" [src]="getImageSrc(attraction)" [alt]="attraction.name" loading="lazy" />
+          } @else {
+            <div class="card-image card-image--placeholder">無圖片</div>
+          }
+
+          <!-- 景點資訊 -->
+          <div class="card-body">
+            <h2 class="card-title">
+              {{ attraction.name }}
+              @if (isFavorite(attraction.id)) {
+                <span class="favorite-badge">★ 已收藏</span>
+              }
+            </h2>
+            <p class="card-district">{{ attraction.distric }}</p>
+            <p class="card-address">{{ attraction.address }}</p>
+            @if (attraction.open_time) {
+              <p class="card-opentime">開放時間：{{ attraction.open_time }}</p>
+            }
+            <p class="card-intro">{{ attraction.introduction | slice:0:80 }}{{ (attraction.introduction?.length ?? 0) > 80 ? '...' : '' }}</p>
+          </div>
+
+        </li>
+      }
+    </ul>
+
+    <!-- 分頁控制 -->
+    <div class="pagination">
+      <button class="btn" [disabled]="currentPage() <= 1" (click)="goToPrevPage()">上一頁</button>
+      <span class="page-info">第 {{ currentPage() }} / {{ totalPages() }} 頁</span>
+      <button class="btn" [disabled]="currentPage() >= totalPages()" (click)="goToNextPage()">下一頁</button>
+    </div>
+  }
+
+</div>
