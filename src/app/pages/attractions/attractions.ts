@@ -48,7 +48,7 @@ export class Attractions implements OnInit {
   // ── Computed ──────────────────────────────────────────
 
   /** 每頁 30 筆（API 固定），計算總頁數 */
-  readonly pageSize = 30;
+  readonly pageSize = 10;
   totalPages = computed(() => Math.ceil(this.total() / this.pageSize) || 1);
 
   /** 是否全選（目前頁所有景點都勾選） */
@@ -67,8 +67,12 @@ export class Attractions implements OnInit {
   /** 載入景點分類（下拉選單用） */
   loadCategories(): void {
     this.attractionService.getCategories().subscribe({
-      next: (data) => this.categories.set(data),
-      error: () => this.errorMsg.set('分類載入失敗'),
+      next: (data: any) => {
+        // API 可能直接回陣列，也可能包在 { data: [] } 裡
+        const arr = Array.isArray(data) ? data : (data?.Category ?? data?.data ?? []);
+        this.categories.set(arr);
+      },
+      error: () => {},  // 分類失敗不影響主流程
     });
   }
 
@@ -86,7 +90,8 @@ export class Attractions implements OnInit {
           this.total.set(res.total ?? 0);
           this.loading.set(false);
         },
-        error: () => {
+        error: (err) => {
+          console.error('[Attractions] error:', err);
           this.errorMsg.set('景點資料載入失敗，請稍後再試');
           this.loading.set(false);
         },
@@ -149,10 +154,10 @@ export class Attractions implements OnInit {
     this.checkedIds.set(new Set()); // 加入後清空勾選
   }
 
-  /** 取得景點第一張圖片網址（欄位名稱為 C# BackingField 格式） */
+  /** 取得景點第一張圖片網址 */
   getImageSrc(attraction: Attraction): string {
-    const img = attraction.images?.[0];
-    return img ? (img as any)['<Src>k__BackingField'] : '';
+    const img = attraction.images?.[0] as any;
+    return img?.src ?? img?.['<Src>k__BackingField'] ?? '';
   }
 
   /** 截斷文字，超過 max 字元加上省略號 */

@@ -138,10 +138,10 @@ export class Favorites {
 
   // ── 工具 ──────────────────────────────────────────────
 
-  /** 取得景點第一張圖片（欄位名稱為 C# BackingField 格式） */
+  /** 取得景點第一張圖片網址 */
   getImageSrc(item: FavoriteAttraction): string {
-    const img = item.images?.[0];
-    return img ? (img as any)['<Src>k__BackingField'] : '';
+    const img = item.images?.[0] as any;
+    return img?.src ?? img?.['<Src>k__BackingField'] ?? '';
   }
 
   /** 存取 service 的 favorites signal（template 用） */

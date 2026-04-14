@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "fetch:data": "node fetch-data.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -17,6 +18,10 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "express": "^5.2.1",
+    "puppeteer": "^24.40.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

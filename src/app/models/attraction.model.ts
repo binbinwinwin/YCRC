@@ -9,11 +9,11 @@ export interface Category {
   name: string;
 }
 
-/** 圖片（API 回傳的欄位名稱為 C# BackingField 格式） */
+/** 圖片 */
 export interface AttractionImage {
-  '<Src>k__BackingField': string;
-  '<Subject>k__BackingField': string;
-  '<Ext>k__BackingField': string;
+  src: string;
+  subject: string;
+  ext: string;
 }
 
 /** 景點資料完整結構（對應 API Attraction definition） */
