@@ -1,22 +1,94 @@
-/* ── 全站基礎樣式 ──────────────────────────────────────── */
+/* ── CSS 主題變數 ────────────────────────────────────────── */
 
-/* CSS Reset：清除瀏覽器預設 margin/padding */
+:root {
+  /* 品牌色 */
+  --brand:        #e05a2b;
+  --brand-dark:   #c44d22;
+  --brand-light:  rgba(224, 90, 43, 0.10);
+  --brand-glow:   rgba(224, 90, 43, 0.25);
+
+  /* 背景層次 */
+  --bg-page:      #f0f2f7;
+  --bg-card:      #ffffff;
+  --bg-muted:     #f7f8fb;
+  --bg-input:     #ffffff;
+  --bg-header:    #f7f8fb;
+
+  /* 文字 */
+  --text-primary:   #14172a;
+  --text-secondary: #454960;
+  --text-muted:     #8890a8;
+
+  /* 邊框 */
+  --border:       #e2e5ee;
+  --border-hover: #c8ccd8;
+
+  /* 陰影 */
+  --shadow-xs: 0 1px 3px rgba(20, 23, 42, 0.06);
+  --shadow-sm: 0 2px 10px rgba(20, 23, 42, 0.08);
+  --shadow-md: 0 6px 24px rgba(20, 23, 42, 0.10);
+  --shadow-lg: 0 16px 48px rgba(20, 23, 42, 0.14);
+
+  /* 導覽列高度 */
+  --nav-h: 62px;
+
+  /* 圓角 */
+  --radius-sm:  8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* 過渡 */
+  --transition: 0.22s ease;
+}
+
+/* ── 深色模式 ────────────────────────────────────────────── */
+
+[data-theme="dark"] {
+  --brand:        #ff7040;
+  --brand-dark:   #e05a2b;
+  --brand-light:  rgba(255, 112, 64, 0.12);
+  --brand-glow:   rgba(255, 112, 64, 0.30);
+
+  --bg-page:      #0e1017;
+  --bg-card:      #181b26;
+  --bg-muted:     #1e2130;
+  --bg-input:     #1e2130;
+  --bg-header:    #181b26;
+
+  --text-primary:   #dde1f0;
+  --text-secondary: #8d94b0;
+  --text-muted:     #505878;
+
+  --border:       #252840;
+  --border-hover: #333758;
+
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.30);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.40);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.50);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.60);
+}
+
+/* ── CSS Reset ──────────────────────────────────────────── */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* 根字體大小與顏色 */
 html {
   font-size: 16px;
-  color: #1a1a1a;
+  /* 主題切換平滑過渡 */
+  transition: background-color var(--transition), color var(--transition);
 }
 
 body {
   font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-  background: #f5f5f5;
+  background: var(--bg-page);
+  color: var(--text-primary);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition), color var(--transition);
 }
 
 a {

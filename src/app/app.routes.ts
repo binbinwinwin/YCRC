@@ -1,8 +1,12 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  // 預設導向景點列表頁
-  { path: '', redirectTo: 'attractions', pathMatch: 'full' },
+  // 根路徑直接載入景點列表（不跳轉 URL）
+  {
+    path: '',
+    loadComponent: () =>
+      import('./pages/attractions/attractions').then(m => m.Attractions),
+  },
 
   // 網頁 1：景點列表（lazy load）
   {

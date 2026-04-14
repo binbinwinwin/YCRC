@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AttractionService } from '../../services/attraction.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { ToastService } from '../../services/toast.service';
+import { AttractionModal } from '../../components/attraction-modal/attraction-modal';
 import { Attraction, Category } from '../../models/attraction.model';
 
 /**
@@ -11,13 +13,17 @@ import { Attraction, Category } from '../../models/attraction.model';
  */
 @Component({
   selector: 'app-attractions',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AttractionModal],
   templateUrl: './attractions.html',
   styleUrl: './attractions.scss',
 })
 export class Attractions implements OnInit {
   private readonly attractionService = inject(AttractionService);
   private readonly favoritesService = inject(FavoritesService);
+  private readonly toastService = inject(ToastService);
+
+  /** 目前開啟詳情的景點 */
+  selectedAttraction = signal<Attraction | null>(null);
 
   // ── 狀態 signals ──────────────────────────────────────
 
@@ -121,6 +127,13 @@ export class Attractions implements OnInit {
     this.loadAttractions();
   }
 
+  goToPage(value: string): void {
+    const page = parseInt(value, 10);
+    if (isNaN(page) || page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.loadAttractions();
+  }
+
   // ── 勾選 ──────────────────────────────────────────────
 
   /** 切換單筆勾選 */
@@ -146,12 +159,29 @@ export class Attractions implements OnInit {
     return this.favoritesService.isFavorite(id);
   }
 
+  /** 開啟景點詳情 Modal */
+  openDetail(attraction: Attraction): void {
+    this.selectedAttraction.set(attraction);
+  }
+
+  /** 關閉景點詳情 Modal */
+  closeDetail(): void {
+    this.selectedAttraction.set(null);
+  }
+
+  /** 從 Modal 加入單筆我的最愛 */
+  addFromModal(attraction: Attraction): void {
+    this.favoritesService.addFavorites([attraction]);
+    this.toastService.show(`「${attraction.name}」已加入我的最愛`);
+  }
+
   /** 將勾選的景點加入我的最愛 */
   addCheckedToFavorites(): void {
     const checked = this.attractions().filter(a => this.checkedIds().has(a.id));
     if (checked.length === 0) return;
     this.favoritesService.addFavorites(checked);
-    this.checkedIds.set(new Set()); // 加入後清空勾選
+    this.toastService.show(`已加入 ${checked.length} 筆景點到我的最愛`);
+    this.checkedIds.set(new Set());
   }
 
   /** 取得景點第一張圖片網址 */

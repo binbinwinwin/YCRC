@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FavoritesService } from '../../services/favorites.service';
+import { ToastService } from '../../services/toast.service';
 import { FavoriteAttraction } from '../../models/attraction.model';
 
 /**
@@ -17,6 +18,7 @@ import { FavoriteAttraction } from '../../models/attraction.model';
 })
 export class Favorites {
   private readonly favoritesService = inject(FavoritesService);
+  private readonly toastService = inject(ToastService);
   private readonly fb = inject(FormBuilder);
 
   // ── 分頁設定 ──────────────────────────────────────────
@@ -62,9 +64,11 @@ export class Favorites {
 
   /** 移除勾選的項目，並重置勾選狀態 */
   removeChecked(): void {
+    const count = this.checkedIds().size;
     const ids = [...this.checkedIds()];
     this.favoritesService.removeFavorites(ids);
     this.checkedIds.set(new Set());
+    this.toastService.show(`已移除 ${count} 筆景點`, 'info');
 
     // 若移除後目前頁超出範圍，退回上一頁
     if (this.currentPage() > this.totalPages()) {
@@ -112,13 +116,13 @@ export class Favorites {
   /** 送出編輯（驗證通過才儲存） */
   submitEdit(): void {
     if (this.editForm.invalid) {
-      // 標記所有欄位為 touched，讓驗證錯誤訊息顯示
       this.editForm.markAllAsTouched();
       return;
     }
 
-    const id = this.editingItem()!.id;
-    this.favoritesService.updateFavorite(id, this.editForm.value);
+    const item = this.editingItem()!;
+    this.favoritesService.updateFavorite(item.id, this.editForm.value);
+    this.toastService.show(`「${item.name}」已儲存`);
     this.closeEdit();
   }
 
@@ -133,6 +137,13 @@ export class Favorites {
   goToNextPage(): void {
     if (this.currentPage() >= this.totalPages()) return;
     this.currentPage.update(p => p + 1);
+    this.checkedIds.set(new Set());
+  }
+
+  goToPage(value: string): void {
+    const page = parseInt(value, 10);
+    if (isNaN(page) || page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
     this.checkedIds.set(new Set());
   }
 

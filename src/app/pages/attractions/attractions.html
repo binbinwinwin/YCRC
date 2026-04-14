@@ -18,9 +18,9 @@
         }
       </select>
 
-      <!-- 加入我的最愛按鈕（有勾選才顯示） -->
+      <!-- 加入我的最愛按鈕（桌機版顯示在 toolbar；手機版由底部 fab-bar 取代） -->
       @if (checkedIds().size > 0) {
-        <button class="btn btn--primary" (click)="addCheckedToFavorites()">
+        <button class="btn btn--primary desktop-add-btn" (click)="addCheckedToFavorites()">
           加入我的最愛（{{ checkedIds().size }}）
         </button>
       }
@@ -67,8 +67,8 @@
             <div class="card-image card-image--placeholder">無圖片</div>
           }
 
-          <!-- 景點資訊 -->
-          <div class="card-body">
+          <!-- 景點資訊（點擊開詳情） -->
+          <div class="card-body" (click)="openDetail(attraction)" style="cursor:pointer">
             <h2 class="card-title">
               {{ attraction.name }}
               @if (isFavorite(attraction.id)) {
@@ -90,9 +90,42 @@
     <!-- 分頁控制 -->
     <div class="pagination">
       <button class="btn" [disabled]="currentPage() <= 1" (click)="goToPrevPage()">上一頁</button>
-      <span class="page-info">第 {{ currentPage() }} / {{ totalPages() }} 頁</span>
+      <span class="page-info">
+        第
+        <input
+          type="number"
+          class="page-jump__input"
+          [min]="1"
+          [max]="totalPages()"
+          [value]="currentPage()"
+          #jumpInput
+          (keydown.enter)="goToPage(jumpInput.value)"
+          (blur)="goToPage(jumpInput.value)"
+        />
+        / {{ totalPages() }} 頁
+      </span>
       <button class="btn" [disabled]="currentPage() >= totalPages()" (click)="goToNextPage()">下一頁</button>
     </div>
   }
 
 </div>
+
+<!-- 景點詳情 Modal -->
+@if (selectedAttraction()) {
+  <app-attraction-modal
+    [attraction]="selectedAttraction()!"
+    [isFavorite]="isFavorite(selectedAttraction()!.id)"
+    (close)="closeDetail()"
+    (addFavorite)="addFromModal(selectedAttraction()!); closeDetail()"
+  />
+}
+
+<!-- 懸浮加入列（勾選後固定在畫面底部） -->
+@if (checkedIds().size > 0) {
+  <div class="fab-bar">
+    <span class="fab-bar__count">已選 {{ checkedIds().size }} 筆</span>
+    <button class="fab-bar__btn" (click)="addCheckedToFavorites()">
+      ＋ 加入我的最愛
+    </button>
+  </div>
+}

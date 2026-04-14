@@ -1,0 +1,5 @@
+{
+  "buildCommand": "node replace-env.mjs && npm run build",
+  "outputDirectory": "dist/taipei-travel/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

@@ -1,0 +1,140 @@
+<!-- 背景遮罩 -->
+<div class="modal-backdrop" (click)="close.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <!-- 關閉按鈕 -->
+    <button class="modal__close" (click)="close.emit()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- 圖片輪播 -->
+    @if (images().length > 0) {
+      <div class="carousel">
+        <img
+          class="carousel__img"
+          [src]="images()[currentIndex()].src"
+          [alt]="attraction().name"
+        />
+
+        @if (images().length > 1) {
+          <button class="carousel__arrow carousel__arrow--prev" (click)="prevImage()" [disabled]="currentIndex() === 0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="carousel__arrow carousel__arrow--next" (click)="nextImage()" [disabled]="currentIndex() === images().length - 1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <div class="carousel__dots">
+            @for (img of images(); track $index) {
+              <button class="carousel__dot" [class.active]="$index === currentIndex()" (click)="setImage($index)"></button>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- 內容 -->
+    <div class="modal__body">
+
+      <!-- 標題 + 行政區 -->
+      <div class="modal__title-row">
+        <h2 class="modal__title">{{ attraction().name }}</h2>
+        @if (isFavorite()) {
+          <span class="modal__fav-badge">★ 已收藏</span>
+        }
+      </div>
+
+      <div class="modal__tags">
+        @if (attraction().distric) {
+          <span class="tag tag--district">{{ attraction().distric }}</span>
+        }
+        @for (cat of attraction().category; track cat.id) {
+          <span class="tag">{{ cat.name }}</span>
+        }
+      </div>
+
+      <!-- 資訊列 -->
+      <div class="modal__info">
+        @if (attraction().address) {
+          <div class="info-row">
+            <span class="info-row__label">地址</span>
+            @if (mapsUrl) {
+              <a class="info-row__value info-row__value--link" [href]="mapsUrl" target="_blank" rel="noopener">
+                {{ attraction().address }}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            } @else {
+              <span class="info-row__value">{{ attraction().address }}</span>
+            }
+          </div>
+        }
+        @if (attraction().tel) {
+          <div class="info-row">
+            <span class="info-row__label">電話</span>
+            <a class="info-row__value info-row__value--link" [href]="'tel:' + attraction().tel">{{ attraction().tel }}</a>
+          </div>
+        }
+        @if (attraction().open_time) {
+          <div class="info-row">
+            <span class="info-row__label">開放時間</span>
+            <span class="info-row__value">{{ attraction().open_time }}</span>
+          </div>
+        }
+        @if (attraction().ticket) {
+          <div class="info-row">
+            <span class="info-row__label">票價</span>
+            <span class="info-row__value">{{ attraction().ticket }}</span>
+          </div>
+        }
+        @if (attraction().staytime) {
+          <div class="info-row">
+            <span class="info-row__label">建議停留</span>
+            <span class="info-row__value">{{ attraction().staytime }}</span>
+          </div>
+        }
+        @if (attraction().official_site) {
+          <div class="info-row">
+            <span class="info-row__label">官網</span>
+            <a class="info-row__value info-row__value--link" [href]="attraction().official_site" target="_blank" rel="noopener">
+              前往官網
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        }
+      </div>
+
+      <!-- 介紹 -->
+      @if (attraction().introduction) {
+        <div class="modal__intro">
+          <h3 class="modal__section-title">景點介紹</h3>
+          <p>{{ attraction().introduction }}</p>
+        </div>
+      }
+
+      <!-- 旅遊叮嚀 -->
+      @if (attraction().remind) {
+        <div class="modal__remind">
+          <h3 class="modal__section-title">旅遊叮嚀</h3>
+          <p>{{ attraction().remind }}</p>
+        </div>
+      }
+
+      <!-- 底部操作列 -->
+      <div class="modal__actions">
+        <button class="modal__close-btn" (click)="close.emit()">關閉</button>
+        @if (!isFavorite()) {
+          <button class="modal__fav-btn" (click)="addFavorite.emit()">
+            ＋ 加入我的最愛
+          </button>
+        } @else {
+          <button class="modal__fav-btn modal__fav-btn--added" disabled>
+            ★ 已加入我的最愛
+          </button>
+        }
+      </div>
+
+    </div>
+  </div>
+</div>

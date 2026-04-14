@@ -1,0 +1,304 @@
+/* 景點詳情 Modal */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  padding: 16px;
+  animation: backdropIn 0.18s ease;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  border: 1.5px solid var(--border);
+  animation: modalIn 0.24s cubic-bezier(0.34, 1.2, 0.64, 1);
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  &__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.35);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition);
+
+    &:hover { background: rgba(0,0,0,0.6); }
+  }
+
+  &__body {
+    padding: 22px 24px 28px;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  &__fav-badge {
+    font-size: 0.75rem;
+    color: var(--brand);
+    background: var(--brand-light);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  &__section-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin: 0 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1.5px solid var(--border);
+  }
+
+  &__intro,
+  &__remind {
+    margin-top: 20px;
+
+    p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1.5px solid var(--border);
+    justify-content: flex-end;
+  }
+
+  &__close-btn {
+    padding: 9px 20px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition);
+
+    &:hover { background: var(--bg-muted); }
+  }
+
+  &__fav-btn {
+    padding: 9px 22px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--brand);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition), box-shadow var(--transition);
+
+    &:hover { background: var(--brand-dark); box-shadow: 0 3px 12px var(--brand-glow); }
+
+    &--added {
+      background: var(--bg-muted);
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      cursor: default;
+      &:hover { background: var(--bg-muted); box-shadow: none; }
+    }
+  }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── 標籤 ────────────────────────────────────────────────── */
+
+.modal__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.tag {
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+
+  &--district {
+    background: var(--brand-light);
+    color: var(--brand);
+    border-color: transparent;
+    font-weight: 600;
+  }
+}
+
+/* ── 資訊列 ──────────────────────────────────────────────── */
+
+.modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--bg-muted);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.info-row {
+  display: flex;
+  gap: 12px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+
+  &__label {
+    flex-shrink: 0;
+    width: 68px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  &__value {
+    color: var(--text-primary);
+    flex: 1;
+
+    &--link {
+      color: var(--brand);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover { opacity: 0.8; }
+    }
+  }
+}
+
+/* ── 圖片輪播 ─────────────────────────────────────────────── */
+
+.carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-muted);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.4);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition);
+    z-index: 2;
+
+    &:hover:not(:disabled) { background: rgba(0,0,0,0.7); }
+    &:disabled { opacity: 0.3; cursor: default; }
+
+    &--prev { left: 10px; }
+    &--next { right: 10px; }
+  }
+
+  &__dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+  }
+
+  &__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background var(--transition), transform var(--transition);
+
+    &.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+  }
+}
+
+/* ── RWD ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .modal {
+    max-height: 95vh;
+    border-radius: var(--radius-md);
+
+    &__body { padding: 18px 16px 24px; }
+    &__title { font-size: 1.2rem; }
+  }
+}
