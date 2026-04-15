@@ -1,5 +1,7 @@
 // Vercel build 前執行：把環境變數 GROQ_API_KEY 寫入 environment.ts
-import { writeFileSync } from 'fs';
+import { writeFileSync, mkdirSync } from 'fs';
+
+mkdirSync('src/environments', { recursive: true });
 
 const key = process.env.GROQ_API_KEY ?? '';
 
